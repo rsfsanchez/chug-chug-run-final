@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Run for clean water. Collect water drops, jump over pollution, and fill the community tank in Chug Chug Run.">
+  <meta name="theme-color" content="#f8f0df">
+  <title>Chug Chug Run — Play</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="runner-animation.js" defer></script>
+  <script src="game-feedback.js" defer></script>
+  <script src="game.js" defer></script>
+  <script src="how-to-play.js" defer></script>
+</head>
+<body>
+  <svg class="svg-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="water-drop" viewBox="0 0 64 82">
+      <path d="M32 3C25 19 7 36 7 53a25 25 0 0 0 50 0C57 36 39 19 32 3Z" fill="#469bd8" stroke="#22292c" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M19 51c0 8 4 13 11 16" fill="none" stroke="#e8f8ff" stroke-width="5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="heart-icon" viewBox="0 0 34 32">
+      <path d="M17 29 4 17C-3 9 3-1 12 3c3 1 4 3 5 5 1-2 3-4 5-5 9-4 15 6 8 14Z" fill="#e34b46" stroke="#9f2f2c" stroke-width="1.5" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="jerry-can" viewBox="0 0 48 54">
+      <path d="M15 5h20l2 8 6 5v30H5V19l7-6 3-8Z" fill="#f3d443" stroke="#22292c" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M16 6v9h19V6M9 23h30" fill="none" stroke="#22292c" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M18 32h13v9H18z" fill="#469bd8" stroke="#22292c" stroke-width="2"/>
+    </symbol>
+    <symbol id="runner-art" viewBox="0 0 200 220">
+      <!-- Sprint pose: lifted front knee, falling front shin, and long rear push-off. -->
+      <!-- Rear thigh drops to a clear knee; the straight shin folds back toward a lifted ankle. -->
+      <path d="M93 132 42 174" fill="none" stroke="#17191a" stroke-width="19" stroke-linecap="round"/>
+      <path d="M42 174 15 145" fill="none" stroke="#17191a" stroke-width="15" stroke-linecap="round"/>
+      <path d="M94 133 149 101 160 164" fill="none" stroke="#17191a" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M11 139 21 147 18 153 6 172q-5 6-6-1l5-20Z" fill="#17191a"/>
+      <path d="M152 164q9-5 18-3l21-8q7-1 8 5l-5 11-24 8-17-3-6-6Z" fill="#17191a"/>
+      <!-- Water collector stays distinct from the black runner silhouette. -->
+      <path d="M38 72q0-9 9-9h30q9 0 9 9v53q0 9-9 9H47q-9 0-9-9Z" fill="#f0f4f2" stroke="#17191a" stroke-width="5"/>
+      <path d="M43 96q10 4 19 0t19 0v28q0 5-5 5H48q-5 0-5-5Z" fill="#469bd8"/>
+      <path d="M44 84h36M49 70h22" stroke="#6b7779" stroke-width="3" stroke-linecap="round"/>
+      <path d="M83 77q11 1 13 13M82 119q12 0 13-11" fill="none" stroke="#17191a" stroke-width="4" stroke-linecap="round"/>
+      <!-- Leaning trunk and opposite arm drive. -->
+      <path d="M111 76 91 132" fill="none" stroke="#17191a" stroke-width="28" stroke-linecap="round"/>
+      <path d="M101 87 75 115 48 132" fill="none" stroke="#17191a" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M116 87 159 84 181 66" fill="none" stroke="#17191a" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Bare head and face profile, entirely black. -->
+      <path d="M116 19c17-1 29 10 29 25l-2 10 8 7-9 7-2 8q-11 9-26 1c-13-7-20-22-17-37 2-12 9-19 19-21Z" fill="#17191a"/>
+      <!-- The blue hydration tube ends at the mouth. -->
+      <path d="M63 76C79 65 94 70 106 81C121 93 137 80 146 65" fill="none" stroke="#17191a" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M63 76C79 65 94 70 106 81C121 93 137 80 146 65" fill="none" stroke="#58b6ee" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="63" cy="76" r="5" fill="#58b6ee" stroke="#17191a" stroke-width="2"/>
+      <circle cx="146" cy="65" r="3" fill="#58b6ee"/>
+    </symbol>
+    <symbol id="toxic-barrel" viewBox="0 0 120 150">
+      <path d="M25 16q35-11 70 0l8 12v107q-43 14-86 0V29Z" fill="#8e9698" stroke="#22292c" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M18 34q42 10 84 0M18 116q42 9 84 0" fill="none" stroke="#535e62" stroke-width="7"/>
+      <path d="M25 16q35-11 70 0M21 136q39 12 80 0" fill="none" stroke="#d7dbd8" stroke-width="5"/>
+      <path d="m78 35-10 18 11 12-13 17 8 20" fill="none" stroke="#596467" stroke-width="5" stroke-linecap="round"/>
+      <path d="M37 55h47v47H37z" fill="#e8d73a" stroke="#22292c" stroke-width="4"/>
+      <path d="M50 88 72 66m-22 0 22 22" stroke="#22292c" stroke-width="4" stroke-linecap="round"/>
+      <path d="M60 65c-9 0-13 6-12 13 0 4 3 7 6 8v5h12v-5c4-1 6-4 6-8 1-7-3-13-12-13Z" fill="#22292c"/>
+      <circle cx="55" cy="76" r="2.6" fill="#e8d73a"/><circle cx="65" cy="76" r="2.6" fill="#e8d73a"/>
+      <path d="m57 85 3-3 3 3" fill="none" stroke="#e8d73a" stroke-width="2"/>
+    </symbol>
+  </svg>
+
+  <svg class="svg-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="cactus-ground-art" viewBox="0 0 110 125">
+      <path d="M56 113V16M56 83H34Q23 83 23 72V55M56 63H77Q86 63 86 52V38" fill="none" stroke="#222a2d" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M56 113V16M56 83H34Q23 83 23 72V55M56 63H77Q86 63 86 52V38" fill="none" stroke="#6f8e68" stroke-width="23" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M52 103V23M20 62v10M83 45v8" fill="none" stroke="#a7bc8c" stroke-width="3" stroke-linecap="round"/>
+      <path d="m42 34-6-3m35 15 6-3M41 99l-6 3m35-15 6 3m-58-41-4-4m70-14 4-5" stroke="#222a2d" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="m32 124 9-5 13 2 12-3 17 6Z" fill="#dfb67e" stroke="#ad8557" stroke-width="1.5" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Timber and pipe supports meet the track at local Y=300.
+         The curved roadside cactus is generated from shared art/collision outlines. -->
+    <symbol id="overhang-grounding" viewBox="0 0 272 300">
+      <ellipse cx="126" cy="300" rx="116" ry="7" fill="#73563d" opacity=".16"/>
+      <path d="m58 296 7 4-7 4m18-8 7 4-7 4m18-8 7 4-7 4" fill="none" stroke="#fff0c2" stroke-width="2.5" opacity=".65"/>
+    </symbol>
+    <symbol id="low-sign-supports" viewBox="0 0 272 300">
+      <use href="#overhang-grounding"/>
+      <ellipse cx="235" cy="299" rx="31" ry="6" fill="#94764d" opacity=".28"/>
+      <path d="M222 296V85l22-5v216Z" fill="#a67549" stroke="#302d28" stroke-width="3" stroke-linejoin="round"/>
+      <path d="m226 91 6-1v195m7-183v158" fill="none" stroke="#d5a46a" stroke-width="3"/>
+      <path d="m116 164 110-66 10 15-102 65Z" fill="#8d603e" stroke="#302d28" stroke-width="3" stroke-linejoin="round"/>
+      <path d="m128 163 96-57" stroke="#d0a06a" stroke-width="3"/>
+      <circle cx="227" cy="111" r="3" fill="#434b4b"/><circle cx="132" cy="166" r="3" fill="#434b4b"/>
+      <path d="m208 300 7-7 15 2 12-3 22 8Z" fill="#e2bf86" stroke="#b38e60" stroke-width="2" stroke-linejoin="round"/>
+      <path d="m215 299 9-2m21 1 10 1" stroke="#fff0c2" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="low-sign-art" viewBox="0 0 272 300">
+      <rect x="8" y="158" width="228" height="24" rx="3" fill="#302d28"/>
+      <rect x="8" y="186" width="228" height="24" rx="3" fill="#302d28"/>
+      <path d="M11 161h222v18H11Zm0 28h222v18H11Z" fill="#b78150"/>
+      <path d="M13 163h216m-216 28h216" stroke="#e1b579" stroke-width="2"/>
+      <path d="m19 172 31-2m137 3 19-2M17 201l28-2m139 2 25-3" fill="none" stroke="#805737" stroke-width="2" stroke-linecap="round"/>
+      <path d="m20 164 9 12m5-12 9 12m151-12 9 12m5-12 9 12" stroke="#e6c86b" stroke-width="5"/>
+      <path d="m11 192 12 5-10 6m207-14-7 5 9 5-10 6" fill="none" stroke="#dfb67e" stroke-width="2"/>
+      <g fill="#434b4b"><circle cx="17" cy="168" r="2.5"/><circle cx="225" cy="168" r="2.5"/><circle cx="17" cy="199" r="2.5"/><circle cx="225" cy="199" r="2.5"/></g>
+    </symbol>
+    <symbol id="low-pipe-supports" viewBox="0 0 272 300">
+      <use href="#overhang-grounding"/>
+      <ellipse cx="241" cy="299" rx="29" ry="6" fill="#94764d" opacity=".28"/>
+      <rect x="230" y="184" width="28" height="110" rx="6" fill="#303a3b"/>
+      <path d="M234 188h20v102h-20Z" fill="#849692"/>
+      <path d="M238 194v91" stroke="#c0ccc0" stroke-width="3"/>
+      <path d="M216 300v-22h47v22Z" fill="#b4a27d" stroke="#52534a" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M218 281h43m-29 0v17" stroke="#d7c59a" stroke-width="3"/>
+      <path d="M227 270h34v8h-34Z" fill="#535e5a" stroke="#303a3b" stroke-width="2"/>
+      <circle cx="231" cy="274" r="2" fill="#dce0c7"/><circle cx="257" cy="274" r="2" fill="#dce0c7"/>
+      <path d="m210 300 12-4 15 3 15-3 15 4" fill="none" stroke="#b38e60" stroke-width="2"/>
+    </symbol>
+    <symbol id="low-pipe-art" viewBox="0 0 272 300">
+      <rect x="8" y="176" width="248" height="34" rx="8" fill="#303a3b"/>
+      <rect x="12" y="180" width="240" height="26" rx="5" fill="#849692"/>
+      <path d="M18 183h230" stroke="#c0ccc0" stroke-width="3"/>
+      <path d="M18 202h230" stroke="#617672" stroke-width="3"/>
+      <rect x="36" y="172" width="16" height="38" rx="3" fill="#303a3b"/><rect x="168" y="172" width="16" height="38" rx="3" fill="#303a3b"/>
+      <path d="M40 176h8v30h-8Zm132 0h8v30h-8Z" fill="#c4af63"/>
+      <path d="m19 185 8 12m169-10 10 4m16 4 15-7" fill="none" stroke="#617672" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <!-- Scenery is reusable vector art: no image downloads or per-frame drawing. -->
+  <svg class="svg-library desert-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="env-far-color" x2="0" y2="1">
+        <stop stop-color="#c8b8bf"/><stop offset="1" stop-color="#eed1ba"/>
+      </linearGradient>
+      <linearGradient id="env-mesa-color" gradientUnits="userSpaceOnUse" x2="0" y2="150">
+        <stop stop-color="#e4a387"/><stop offset=".65" stop-color="#eab28f"/><stop offset="1" stop-color="#f1c79f"/>
+      </linearGradient>
+      <linearGradient id="env-dune-color" x2=".2" y2="1">
+        <stop stop-color="#fbe0a6"/><stop offset="1" stop-color="#e6b87f"/>
+      </linearGradient>
+      <linearGradient id="env-sand-color" x2="0" y2="1">
+        <stop stop-color="#edc087"/><stop offset="1" stop-color="#f6d9a8"/>
+      </linearGradient>
+      <path id="env-mesa-shape" d="M0 134 39 101 70 77 108 72 128 32 159 28 164 18h87l7 19 24 3 24 47 40 15 25 27 44 11v10H0Z M407 150l37-20 19-29 26-3 12-27 55-4 14 34 24 3 25 28 33 13v5Z M628 150l51-27 19-35 25-4 19-47 29-4 7-20h91l13 28 30 5 25 58 29 11 20 20 25 6v9Z M976 150l29-22 37-4 20-40 24-5 7-29h39l6-35h44l8 19 20 4 16 58 33 16 24 31 37 7Z M1264 150l54-10 34-15 45-5 23-45h70l9 28 38 9 31 16 32 6v16Z"/>
+      <clipPath id="env-mesa-clip"><use href="#env-mesa-shape"/></clipPath>
+    </defs>
+    <symbol id="env-clouds" viewBox="0 0 1600 155">
+      <g fill="#fff9e9" opacity=".7">
+        <path d="M86 57c6-8 18-10 29-7 5-16 30-22 44-11 11-3 25 5 27 14 14-2 29 4 33 12H87q-12 0-1-8Z"/>
+        <path d="M533 28c9-8 25-9 36-6 8-15 33-15 44-2 20-6 39 3 43 14H534q-10-1-1-6Z" opacity=".65"/>
+        <path d="M1030 79c10-10 25-12 39-9 3-13 16-22 31-22 13 0 23 7 28 17 16-4 32 3 36 14 16-1 31 6 34 12h-170q-11-2 2-12Z"/>
+        <path d="M1418 36c5-7 16-10 26-7 4-12 25-17 36-7 13-2 23 3 28 11 11 0 22 4 25 10h-114q-9-1-1-7Z" opacity=".55"/>
+      </g>
+      <g fill="none" stroke="#fff9e9" stroke-linecap="round" opacity=".36">
+        <path d="M246 82h88m-63 7h102m353-31h71m379-30h57m-81 9h111" stroke-width="3"/>
+      </g>
+      <g fill="none" stroke="#809c9e" stroke-width="1.6" stroke-linecap="round" opacity=".55">
+        <path d="M379 100q5-5 10 0 5-5 10 0m15-11q4-4 8 0 4-4 8 0m850 23q5-5 10 0 5-5 10 0"/>
+      </g>
+    </symbol>
+    <symbol id="env-far-mountains" viewBox="0 0 1600 170">
+      <path d="M0 126 39 108 80 112 127 75 166 72 195 40 236 36 262 63 293 65 327 100 376 116 416 97 457 104 509 60 548 63 588 16 620 21 647 53 679 52 729 99 764 109 810 93 844 99 900 63 945 54 968 71 997 77 1039 112 1091 106 1120 82 1155 85 1191 48 1227 40 1255 66 1282 64 1323 97 1374 117 1418 108 1462 85 1490 90 1528 114 1569 116 1600 126V170H0Z" fill="url(#env-far-color)"/>
+      <path d="m195 40 16 47 36 18 44 2-29-44-26-27Zm393-24 15 60 42 21 62 5-28-50-32 1-27-32Zm603 32 18 44 53 25 44-4-24-49-27 2-28-26Z" fill="#bdabb5" opacity=".3"/>
+      <path d="M0 146q180-26 350 1t350-1 350-1 350 1 200 0v24H0Z" fill="#f1d4b8" opacity=".65"/>
+    </symbol>
+    <symbol id="env-mesas" viewBox="0 0 1600 150">
+      <use href="#env-mesa-shape" fill="url(#env-mesa-color)"/>
+      <g clip-path="url(#env-mesa-clip)">
+        <g fill="#c98979" opacity=".38">
+          <path d="m251 18 7 19 24 3 24 47 40 15 25 27-77-12-31-39-20-7-13-53Z"/>
+          <path d="m869 13 13 28 30 5 25 58 29 11 20 20-63-14-29-30-24-5-19-73Z"/>
+          <path d="m1182 15 8 19 20 4 16 58 33 16 24 31-65-16-25-36-24-8-10-68Z"/>
+          <path d="m556 67 14 34 24 3 25 28-47-16-21-29-12-19Z"/>
+        </g>
+        <g fill="none" stroke-linecap="round">
+          <path d="m137 36 24-3h80m-111 15h65m-92 34 42-5h95m-123 18h50m599-48h72m-83 15h50m-73 24h89m-102 19h45m316-59h30m-37 29h36m-701 18h45m803 13h41" stroke="#f5c5a0" stroke-width="3"/>
+          <path d="M148 62h81m-90 48h115m525-26h66m-79 32h113m238-24h39m-646 20h27m900-2h37" stroke="#ca927e" stroke-width="2" opacity=".4"/>
+        </g>
+      </g>
+      <path d="M0 141q133-14 265-2t263 0 265-1 270 0 269 1 268 2v9H0Z" fill="#f3cea2"/>
+    </symbol>
+    <symbol id="env-acacia" viewBox="0 0 70 65">
+      <path d="m31 63 4-29m0 10L19 28m16 12 18-15" fill="none" stroke="#a09978" stroke-width="4" stroke-linecap="round"/>
+      <path d="M3 29q-3-12 12-16 5-11 18-7 15-9 24 3 15-1 12 13 5 10-11 12H17Q4 35 3 29Z" fill="#a5ae84"/>
+      <path d="M7 23q10-10 21-6 9-10 23-2 9-2 15 5-8 0-14 4-13-4-26 3-9-5-19-4Z" fill="#bec091"/>
+    </symbol>
+    <symbol id="env-village" viewBox="0 0 1600 110">
+      <g fill="#c9aa84" opacity=".42">
+        <ellipse cx="883" cy="100" rx="177" ry="7"/><ellipse cx="301" cy="101" rx="39" ry="4"/>
+      </g>
+      <use href="#env-acacia" x="282" y="51" width="45" height="45"/>
+      <g stroke-linejoin="round">
+        <path d="M735 96V70h40v26m9 0V60h53v36m17 0V73h31v23m102 0V67h47v29m11 0V77h32v19" fill="#dab58c"/>
+        <path d="M784 60h53v6h-53m203 1h47v5h-47" fill="#bda284"/>
+        <path d="m729 70 25-14 27 14Zm120 3 21-12 21 12Zm191 4 21-11 22 11Z" fill="#bb9f85"/>
+        <path d="M742 75h5v6h-5m51-7h7v8h-7m20-8h7v8h-7m185-5h7v8h-7" fill="#a58f7b"/>
+        <path d="M755 96V81h10v15m47 0V83h10v13m192 0V82h10v14" fill="#ad987e"/>
+        <!-- A small community water tower and solar panel, quiet on the horizon. -->
+        <path d="m906 97 4-46m26 46-4-46m-23 13h24m-25 14h27m-26 0 24-14m-23 0 25 33" fill="none" stroke="#a2987b" stroke-width="3"/>
+        <rect x="902" y="24" width="38" height="32" rx="7" fill="#e7d6ab"/>
+        <path d="M903 33h36m-36 14h36" stroke="#c7ba95" stroke-width="2"/>
+        <path d="M906 25q15-9 30 0" fill="#c7ba95"/>
+        <path d="M920 36c-2 4-5 6-5 9a5 5 0 0 0 10 0c0-3-3-5-5-9Z" fill="#94b9b4"/>
+        <path d="M941 52h8v29h8" fill="none" stroke="#b4ac8d" stroke-width="2"/>
+        <path d="m961 85 25-3-4-14-25 3Z" fill="#9eaeb0"/>
+        <path d="m966 70 4 14m3-15 4 14m-19-5 25-3" stroke="#c8cfc0" stroke-width="1"/>
+        <path d="m966 86-2 9m14-10 3 10" stroke="#b0a486" stroke-width="2"/>
+      </g>
+      <use href="#env-acacia" x="1100" y="36" width="63" height="59"/>
+      <use href="#env-acacia" x="1385" y="65" width="34" height="31"/>
+    </symbol>
+    <symbol id="env-dunes" viewBox="0 0 1600 100">
+      <path d="M0 36C130 10 184 8 306 34S512 71 652 44 866 0 1002 27 1201 69 1330 45 1470 62 1600 36V100H0Z" fill="#f4d6a3"/>
+      <path d="M0 67C113 67 215 33 339 43S548 92 704 71 917 35 1059 53 1292 93 1429 71 1487 67 1600 67V100H0Z" fill="url(#env-dune-color)"/>
+      <path d="M-30 84C106 60 209 73 314 79S496 94 604 89 769 69 850 75 1005 95 1102 87 1290 69 1373 78 1517 91 1630 84" fill="none" stroke="#ffe6b4" stroke-width="3"/>
+      <path d="M178 62q64-13 123-8m438-9q45-13 101-12m313 40q57 12 107 4m214-16q44-7 77-2" fill="none" stroke="#fff0c9" stroke-width="2" stroke-linecap="round" opacity=".65"/>
+    </symbol>
+    <symbol id="env-cactus" viewBox="0 0 50 70">
+      <path d="M27 66V9m0 36H15Q9 45 9 39V28m18 5h10q6 0 6-6V18" fill="none" stroke="#94a082" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M25 60V10M7 29v10m34-20v9" fill="none" stroke="#bec29a" stroke-width="2" stroke-linecap="round"/>
+      <path d="m24 5 3-3 3 3" fill="none" stroke="#e5b398" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="env-shrub" viewBox="0 0 58 32">
+      <ellipse cx="29" cy="29" rx="27" ry="2.5" fill="#be9c71" opacity=".3"/>
+      <path d="M8 27Q1 15 10 14q0-9 9-6 5-13 14-5 12-6 14 7 14 1 7 15-21 8-46 2Z" fill="#a5aa7f"/>
+      <path d="m13 23 7-5m9 8 2-14m10 11 5-5" fill="none" stroke="#c5c797" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="env-rocks" viewBox="0 0 65 29">
+      <ellipse cx="33" cy="26" rx="30" ry="3" fill="#bc936b" opacity=".25"/>
+      <path d="m8 24 4-13 11-6 20 3 9 15Z" fill="#caa07b"/>
+      <path d="m12 11 11-6 20 3-10 4Z" fill="#ebc298"/>
+      <path d="m33 12 10-4 9 15-16 1Z" fill="#bc9476"/>
+      <path d="m44 25 3-10 10-1 6 11Z" fill="#dab58b"/>
+      <path d="m47 15 10-1 4 5-11-1Z" fill="#f1ce9f"/>
+    </symbol>
+    <!-- Rounded, sun-bleached animal remains are scenery, never game objects. -->
+    <symbol id="env-cattle-skull" viewBox="0 0 112 68">
+      <ellipse cx="57" cy="59" rx="37" ry="4" fill="#a78359" opacity=".18"/>
+      <g fill="#eee2c9" stroke="#b6a180" stroke-width="1.8" stroke-linejoin="round">
+        <path d="M42 22C27 26 15 22 10 10 7 3 6 3 6 9c-1 17 12 28 32 26Z"/>
+        <path d="M70 22c15 4 27 0 32-12 3-7 4-7 4-1 1 17-12 28-32 26Z"/>
+        <path d="M41 21q15-8 30 0l5 12-6 10-6 17q-8 6-16 0l-6-17-6-10Z" fill="#fff5dc"/>
+      </g>
+      <path d="M68 25 70 34 64 43 60 59l-8 2 5 2 7-3 6-17 6-10-5-12Z" fill="#ded0b4"/>
+      <path d="M43 32q6-5 10 1l-3 6q-7 1-7-7Zm26 0q-6-5-10 1l3 6q7 1 7-7Z" fill="#b5a082"/>
+      <path d="m53 48-2 5m8-5 2 5" stroke="#ad9779" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M49 24q7-3 13 0m-6 4-1 12M14 20q8 8 20 8m44 0q12 0 20-8" fill="none" stroke="#fffaf0" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="m59 20-2 4 3 3" fill="none" stroke="#d1bea0" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="m35 61 13-2 10 3 13-3 10 2" fill="none" stroke="#eac48e" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="env-rib-cage" viewBox="0 0 112 68">
+      <ellipse cx="55" cy="55" rx="43" ry="4" fill="#a78359" opacity=".16"/>
+      <path d="M18 29q36-16 73-1" fill="none" stroke="#b6a180" stroke-width="9" stroke-linecap="round"/>
+      <path d="M18 28q36-16 73-1" fill="none" stroke="#f8edd3" stroke-width="6" stroke-linecap="round"/>
+      <g fill="none" stroke-linecap="round">
+        <defs><path id="env-rib-curves" d="M25 28q-12 10-4 22m19-26q-13 12-6 30m21-31q-12 13-6 32m21-31q-10 12-6 29m20-26q-8 11-5 22"/></defs>
+        <use href="#env-rib-curves" stroke="#b6a180" stroke-width="7.5"/>
+        <use href="#env-rib-curves" stroke="#fff3da" stroke-width="4.5"/>
+        <path d="m31 31-3 8m18-10-4 11m19-10-4 12m19-10-4 9" stroke="#fffaf0" stroke-width="1.4"/>
+      </g>
+      <path d="m12 55 13-2 9 3 16-2 15 2 18-3 11 1" fill="none" stroke="#eac48e" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="env-long-bone" viewBox="0 0 74 24">
+      <path d="M13 5C6-2 0 5 5 11c-6 6 1 15 8 8l47-1c7 7 15-1 9-7 5-7-3-13-10-6Z" fill="#f9efd7" stroke="#b6a180" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="m16 15 40-1m-42-5 30-1" fill="none" stroke="#ddceb2" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="env-scattered-bones" viewBox="0 0 112 68">
+      <ellipse cx="55" cy="52" rx="44" ry="4" fill="#a78359" opacity=".14"/>
+      <use href="#env-long-bone" x="7" y="19" width="74" height="24" transform="rotate(-13 44 31)"/>
+      <use href="#env-long-bone" x="42" y="39" width="55" height="18" transform="rotate(16 69 48)"/>
+      <path d="m13 48 12-2m56 11 15-1" stroke="#eac48e" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="32" cy="53" r="2" fill="#d1ad7e"/>
+    </symbol>
+    <symbol id="env-spine" viewBox="0 0 112 68">
+      <ellipse cx="55" cy="47" rx="39" ry="4" fill="#a78359" opacity=".14"/>
+      <path d="m19 36 71 7" stroke="#b6a180" stroke-width="8" stroke-linecap="round"/>
+      <path d="m19 35 71 7" stroke="#f8edd3" stroke-width="5" stroke-linecap="round"/>
+      <g fill="#fff3da" stroke="#b6a180" stroke-width="1.6" stroke-linejoin="round">
+        <path id="env-vertebra" d="m24 30 3-9q3-3 5 1l1 9 7 3q3 3-1 5l-7 1-3 6q-3 3-5-1v-7l-7-2q-3-3 1-5Z"/>
+        <use href="#env-vertebra" transform="translate(21 2) rotate(4 28 34)"/>
+        <use href="#env-vertebra" transform="translate(42 4) rotate(-3 28 34)"/>
+        <use href="#env-vertebra" transform="translate(63 6) scale(.85)"/>
+      </g>
+      <path d="m18 47 12-1 14 3m23 1 13-1 14 2" fill="none" stroke="#eac48e" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="env-partial-remains" viewBox="0 0 112 68">
+      <use href="#env-rib-cage" x="32" y="3" width="77" height="47"/>
+      <use href="#env-cattle-skull" x="0" y="19" width="68" height="42" transform="rotate(-12 34 40)"/>
+      <use href="#env-long-bone" x="61" y="49" width="44" height="14" transform="rotate(-9 83 56)"/>
+    </symbol>
+    <symbol id="env-plants" viewBox="0 0 1600 65">
+      <g fill="#c6a573" opacity=".25">
+        <ellipse cx="140" cy="57" rx="28" ry="3"/><ellipse cx="540" cy="59" rx="23" ry="3"/><ellipse cx="1210" cy="58" rx="31" ry="3"/>
+      </g>
+      <use href="#env-cactus" x="125" y="12" width="33" height="47"/>
+      <use href="#env-cactus" x="150" y="29" width="20" height="29"/>
+      <use href="#env-shrub" x="98" y="43" width="28" height="15"/>
+      <use href="#env-rocks" x="352" y="42" width="46" height="20"/>
+      <use href="#env-cactus" x="524" y="27" width="25" height="35"/>
+      <use href="#env-shrub" x="558" y="49" width="23" height="13"/>
+      <use href="#env-shrub" x="779" y="40" width="42" height="23"/>
+      <use href="#env-rocks" x="858" y="50" width="35" height="15"/>
+      <use href="#env-cactus" x="1184" y="5" width="38" height="53"/>
+      <use href="#env-cactus" x="1218" y="26" width="24" height="34"/>
+      <use href="#env-rocks" x="1242" y="46" width="33" height="15"/>
+      <use href="#env-shrub" x="1481" y="43" width="35" height="19"/>
+      <g fill="none" stroke="#bdab7c" stroke-width="2" stroke-linecap="round">
+        <path d="m282 60-3-6m3 6 3-8m405 10-3-7m3 7 4-9m393 8-3-5m3 5 3-8m347 9-3-5m3 5 3-7"/>
+      </g>
+    </symbol>
+    <symbol id="env-foreground" viewBox="0 0 1600 72">
+      <path d="M0 0h1600v72H0Z" fill="url(#env-sand-color)"/>
+      <path d="M0 11c152 15 216 4 355 1s230 25 391 17 254-20 384-10 318-23 470-8" fill="none" stroke="#ffe0ac" stroke-width="4"/>
+      <path d="M0 50C150 37 210 65 320 52S520 39 660 50 860 62 1000 51 1190 39 1340 50C1440 61 1450 63 1600 50" fill="none" stroke="#dfb587" stroke-width="2"/>
+      <g fill="none" stroke="#cda379" stroke-width="1.7" stroke-linecap="round" opacity=".65">
+        <path d="m80 32 16 5 12-3m-12 3 4 7m389-26 12 4 9-2m-9 2 1 7m399 14 13-6 15 2m-15-2 2-7m449-7 12 6 10-3m-10 3-3 7"/>
+      </g>
+      <g fill="#bd9471" opacity=".5">
+        <ellipse cx="187" cy="49" rx="4" ry="1.6"/><ellipse cx="630" cy="18" rx="3" ry="1.3"/><ellipse cx="1056" cy="52" rx="5" ry="1.5"/><ellipse cx="1480" cy="28" rx="3" ry="1.3"/>
+      </g>
+      <use href="#env-rocks" x="323" y="32" width="44" height="20"/>
+      <use href="#env-rocks" x="1134" y="25" width="31" height="14"/>
+      <g fill="none" stroke="#b3a171" stroke-width="2" stroke-linecap="round">
+        <path d="m531 58-8-11m8 11-2-17m2 17 7-13m869 11-7-10m7 10 1-16m-1 16 8-8"/>
+      </g>
+      <g fill="#f4dfb2"><circle cx="530" cy="41" r="2"/><circle cx="1415" cy="46" r="2"/></g>
+    </symbol>
+  </svg>
+
+  <main class="game-shell">
+    <header class="sheet-header">
+      <div class="sheet-name"><strong>CHUG CHUG RUN</strong><span>RUN FOR CLEAN WATER</span></div>
+      <div class="header-tools">
+        <p class="screen-flow" aria-label="Game flow"><span data-step="start" class="current">START</span><b aria-hidden="true">→</b><span data-step="game">RUN</span><b aria-hidden="true">→</b><span data-step="results">RESULTS</span></p>
+        <button id="sound-button" class="sound-toggle" type="button" aria-pressed="true" aria-label="Sound on. Turn sound off">SOUND ON</button>
+      </div>
+    </header>
+
+    <section id="start-screen" class="screen screen-start" aria-labelledby="start-heading">
+      <header class="screen-heading"><span class="step">01</span><h2 id="start-heading">START</h2><span class="heading-note">WATER FOR ALL</span></header>
+      <div class="start-content">
+        <div class="start-brand"><svg viewBox="0 0 48 54" aria-hidden="true"><use href="#jerry-can"/></svg><span>charity: water<small>COLLEGE GAME CONCEPT</small></span></div>
+        <svg class="start-drop" viewBox="0 0 64 82" aria-hidden="true"><use href="#water-drop"/></svg>
+        <h1 class="start-logo" aria-label="Chug Chug Run"><span>CHUG</span><span>CHUG</span><em>RUN!</em></h1>
+        <p class="start-line">RUN FOR CLEAN WATER</p>
+        <p class="start-mission">Inspired by charity: water’s mission to bring clean and safe drinking water to people who need it.</p>
+        <fieldset class="difficulty-picker">
+          <legend>CHOOSE YOUR CHALLENGE</legend>
+          <div class="difficulty-options" role="group" aria-label="Difficulty">
+            <button id="difficulty-easy" class="difficulty-option" type="button" aria-pressed="false"><b class="difficulty-check" aria-hidden="true">✓</b><span>EASY</span><small>Fewer hazards<br>Wider gaps</small></button>
+            <button id="difficulty-normal" class="difficulty-option" type="button" aria-pressed="true"><b class="difficulty-check" aria-hidden="true">✓</b><span>NORMAL</span><small>Balanced hazards<br>Classic mix</small></button>
+            <button id="difficulty-hard" class="difficulty-option" type="button" aria-pressed="false"><b class="difficulty-check" aria-hidden="true">✓</b><span>HARD</span><small>More hazards<br>Trickier mix</small></button>
+          </div>
+          <p>New level every 500 meters. Keep running for clean water!</p>
+        </fieldset>
+        <button id="play-button" class="play-control" type="button" aria-label="Play Chug Chug Run"><span aria-hidden="true"></span></button>
+        <p class="play-label">PLAY</p>
+        <div class="start-actions">
+          <button id="how-to-play-button" class="how-to-play-button" type="button" aria-haspopup="dialog" aria-controls="how-to-play-dialog">HOW TO PLAY</button>
+          <a class="mission-link" href="https://www.charitywater.org/" target="_blank" rel="noopener noreferrer">Visit charity: water<span aria-hidden="true">&nbsp;↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
+        </div>
+        <div class="start-landscape" aria-hidden="true">
+          <span class="start-sun"></span><span class="start-hill hill-one"></span><span class="start-hill hill-two"></span>
+          <svg class="start-runner" viewBox="0 0 200 220"><use href="#runner-art"/></svg>
+          <svg class="start-pickup" viewBox="0 0 64 82"><use href="#water-drop"/></svg>
+          <span class="start-path"></span><span class="start-drybed"><i></i><i></i><i></i></span>
+        </div>
+      </div>
+      <p class="start-instructions">Collect water. Jump over spills. Slide under cactus arms and barriers.<br><kbd>A</kbd> / <kbd>D</kbd> to move · <kbd>Space</kbd> / <kbd>↑</kbd> to double jump · Hold <kbd>S</kbd> / <kbd>↓</kbd> to slide.<br>Watch vent warnings. On mobile, use the arrow, Slide, and Jump buttons.</p>
+    </section>
+
+    <section id="game-screen" class="screen screen-game" aria-labelledby="game-heading" hidden>
+      <header class="screen-heading">
+        <span class="step">02</span><h2 id="game-heading">GAMEPLAY</h2>
+        <div class="run-actions"><button id="pause-button" class="small-button" type="button" aria-label="Pause game">Ⅱ <span>PAUSE</span></button><button id="reset-button" class="small-button" type="button">↻ RESET</button></div>
+      </header>
+      <div class="game-hud">
+        <div class="lives-level"><div id="hearts" class="hearts" role="img" aria-label="3 of 3 hearts remaining">
+          <svg viewBox="0 0 34 32" aria-hidden="true"><use href="#heart-icon"/></svg><svg viewBox="0 0 34 32" aria-hidden="true"><use href="#heart-icon"/></svg><svg viewBox="0 0 34 32" aria-hidden="true"><use href="#heart-icon"/></svg>
+        </div><div id="level-indicator" class="level-indicator"><span id="run-difficulty">NORMAL</span><b>LEVEL <span id="level-number">1</span></b></div></div>
+        <div class="hud-stat score-stat"><strong id="score">0</strong><span>SCORE</span></div>
+        <div class="hud-stat distance-stat"><strong><span id="distance">0</span> <small id="distance-unit">M</small></strong><span>DISTANCE</span></div>
+        <div class="hud-stat time-stat"><strong id="timer">00:00</strong><span>TIME</span></div>
+        <div id="hud-tank" class="hud-tank" role="img" aria-label="Community tank 0 of 20,000 water units, 0.000 percent full"><span class="hud-tank-icon" aria-hidden="true"><i id="hud-tank-fill"></i></span><span><b id="tank-percent">0.000%</b><span id="tank-amount" class="tank-amount">0 / 20,000</span><small>COMMUNITY TANK</small></span></div>
+      </div>
+
+      <div class="score-milestone-slot">
+        <div id="behind-warning" class="behind-warning" role="region" aria-label="Falling behind warning" hidden><strong>KEEP UP!</strong><span id="behind-countdown">4.0s</span><span><b id="behind-allowance">1.50</b> m LEFT</span><span id="behind-meter" class="behind-meter" role="meter" aria-label="Remaining backward allowance in meters" aria-valuemin="0" aria-valuemax="1.5" aria-valuenow="1.5"><i id="behind-fill"></i></span></div>
+        <p id="level-announcement" role="status" aria-live="polite" aria-atomic="true" hidden></p><p id="score-milestone" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+      </div>
+      <div id="world" class="run-world" tabindex="0" role="group" aria-label="Runner game. A/D or Left/Right to move. Space or Up to double jump. Hold S or Down to slide. P or Escape to pause." aria-describedby="control-help">
+        <div id="scene" class="scene" aria-hidden="true">
+          <span class="sky-glow"></span><span class="world-sun"></span>
+          <div id="clouds" class="desert-clouds scenery-strip"><svg class="environment-tile" viewBox="0 0 1600 155"><use href="#env-clouds"/></svg><svg class="environment-tile" viewBox="0 0 1600 155"><use href="#env-clouds"/></svg></div>
+          <div id="mountains" class="distant-mountains scenery-strip"><svg class="environment-tile" viewBox="0 0 1600 170"><use href="#env-far-mountains"/></svg><svg class="environment-tile" viewBox="0 0 1600 170"><use href="#env-far-mountains"/></svg></div>
+          <div id="mesas" class="desert-mesas scenery-strip"><svg class="environment-tile" viewBox="0 0 1600 150"><use href="#env-mesas"/></svg><svg class="environment-tile" viewBox="0 0 1600 150"><use href="#env-mesas"/></svg></div>
+          <div class="horizon-haze"></div>
+          <div id="village" class="desert-village scenery-strip"><svg class="environment-tile" viewBox="0 0 1600 110"><use href="#env-village"/></svg><svg class="environment-tile" viewBox="0 0 1600 110"><use href="#env-village"/></svg></div>
+          <div id="dunes" class="desert-dunes scenery-strip"><svg class="environment-tile" viewBox="0 0 1600 100"><use href="#env-dunes"/></svg><svg class="environment-tile" viewBox="0 0 1600 100"><use href="#env-dunes"/></svg></div>
+          <div id="plants" class="ground-plants scenery-strip"><svg class="environment-tile" viewBox="0 0 1600 65"><use href="#env-plants"/></svg><svg class="environment-tile" viewBox="0 0 1600 65"><use href="#env-plants"/></svg></div>
+          <div id="bones-midground" class="bone-scenery bones-midground"></div>
+          <div class="track"><span class="track-edge"></span><span id="pebbles" class="track-pebbles"></span></div>
+          <div class="dry-bank"></div>
+          <div class="dry-riverbed"><div id="cracks" class="cracks-strip scenery-strip"><svg class="environment-tile" viewBox="0 0 1600 72"><use href="#env-foreground"/></svg><svg class="environment-tile" viewBox="0 0 1600 72"><use href="#env-foreground"/></svg></div></div>
+          <div id="bones-foreground" class="bone-scenery bones-foreground"></div>
+          <div id="gameplay-plane" class="gameplay-plane">
+            <div id="object-shadows" class="object-shadows"></div>
+            <div id="speed-lines" class="speed-lines"><i></i><i></i><i></i></div>
+            <span id="runner-shadow" class="runner-shadow"></span>
+            <div id="runner" class="main-runner"><svg id="animated-runner" viewBox="0 0 200 220"></svg></div>
+            <div id="objects" class="objects"></div>
+            <div id="effects" class="effects"></div>
+          </div>
+        </div>
+        <p id="run-message" class="run-message">COLLECT BLUE WATER. WATCH FOR POLLUTION!</p>
+        <div id="pause-overlay" class="pause-overlay" hidden><div class="pause-card"><p class="run-complete">TAKE A BREATHER</p><h3>RUN PAUSED</h3><p id="pause-reason">Ready when you are.</p><button id="resume-button" class="again-control" type="button">KEEP RUNNING <span aria-hidden="true">→</span></button></div></div>
+      </div>
+
+      <div class="touch-bar">
+        <div class="control-info"><p id="control-help"><kbd>A</kbd> / <kbd>D</kbd> or <kbd>←</kbd> / <kbd>→</kbd> move<br><kbd>Space</kbd> / <kbd>↑</kbd> jump · Hold <kbd>S</kbd> / <kbd>↓</kbd> slide <span class="desktop-hint">· <kbd>P</kbd> pause</span></p><span class="water-count"><svg viewBox="0 0 64 82" aria-hidden="true"><use href="#water-drop"/></svg><strong id="water-count">0</strong> WATER DROPS <span class="sip-count">· <b id="sip-count">0</b> SIPS</span></span></div>
+        <div class="touch-controls" role="group" aria-label="Runner controls">
+          <div class="direction-controls"><button id="left-button" class="direction-button" type="button" aria-label="Hold to move left" aria-pressed="false">←</button><button id="right-button" class="direction-button" type="button" aria-label="Hold to move right" aria-pressed="false">→</button></div>
+          <button id="slide-button" class="slide-button" type="button" aria-label="Hold to slide" aria-pressed="false">SLIDE <span aria-hidden="true">↓</span></button>
+          <button id="jump-button" class="jump-button" type="button">JUMP <span aria-hidden="true">↑</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="results-screen" class="screen screen-results" aria-labelledby="results-heading" hidden>
+      <header class="screen-heading"><span class="step">03</span><h2 id="results-heading">RUN RESULTS</h2><span class="heading-note">EVERY DROP COUNTS</span></header>
+      <div class="results-content">
+        <p id="run-outcome" class="run-complete">RUN COMPLETE</p>
+        <div class="results-title"><h3 id="results-title" tabindex="-1">TANK<br><span>PROGRESS!</span></h3><svg viewBox="0 0 64 82" aria-hidden="true"><use href="#water-drop"/></svg></div>
+        <p id="results-message" class="results-message">Your run helped fill the community tank.</p>
+        <svg id="results-tank" class="community-tank" viewBox="0 0 260 235" role="img" aria-label="Community water tank 0 percent full">
+          <defs><clipPath id="game-tank-interior"><rect x="48" y="53" width="164" height="124" rx="13"/></clipPath></defs>
+          <path d="M70 42q60-29 120 0" fill="none" stroke="#273034" stroke-width="8" stroke-linecap="round"/>
+          <rect x="42" y="44" width="176" height="143" rx="23" fill="#f5f6f2" stroke="#273034" stroke-width="8"/>
+          <g clip-path="url(#game-tank-interior)"><g id="results-tank-level"><path id="results-tank-water" d="M42 53q22-8 44 0t44 0 44 0 44 0v190H42Z" fill="#4d9fdb"/><path id="results-tank-wave" d="M42 53q22-8 44 0t44 0 44 0 44 0" fill="none" stroke="#8bd2f3" stroke-width="6"/></g></g>
+          <text id="results-tank-label" x="130" y="157" text-anchor="middle" fill="#216d9f" font-size="30" font-family="Arial, sans-serif" font-weight="900" stroke="#f5f6f2" stroke-width="1" paint-order="stroke">0.000%</text>
+          <path d="M66 187v27h19l6-27M194 187v27h-19l-6-27" fill="#c8cecb" stroke="#273034" stroke-width="6" stroke-linejoin="round"/>
+          <path d="M218 149h17v48h-18" fill="none" stroke="#273034" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M86 24h88" stroke="#273034" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+        <p id="results-tank-amount" class="results-tank-amount">0 / 20,000 WATER UNITS</p>
+        <p class="result-level"><span id="final-difficulty">NORMAL</span><strong>LEVEL <span id="final-level">1</span> REACHED</strong></p>
+        <div class="result-score"><span>FINAL SCORE</span><strong id="final-score">0</strong></div>
+        <dl class="run-totals"><div><dd id="final-water">0</dd><dt>WATER DROPS</dt></div><div><dd id="final-distance">0 m</dd><dt>DISTANCE RUN</dt></div><div><dd id="final-time">00:00</dd><dt>TIME SURVIVED</dt></div><div><dd id="final-tank">+0</dd><dt>WATER DEPOSITED</dt></div></dl>
+        <section class="results-mission" aria-labelledby="results-mission-heading">
+          <h4 id="results-mission-heading">EVERY DROP HAS A PURPOSE</h4>
+          <p>Great collecting! Filling the game’s community tank celebrates a shared goal: clean water for everyone. In the real world, charity: water helps bring clean and safe drinking water to people who need it.</p>
+          <div class="mission-links">
+            <a class="mission-link" href="https://www.charitywater.org/" target="_blank" rel="noopener noreferrer">Learn More About charity: water<span aria-hidden="true">&nbsp;↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
+            <a class="mission-link donation-link" href="https://www.charitywater.org/donate" target="_blank" rel="noopener noreferrer">Donate to charity: water<span aria-hidden="true">&nbsp;↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
+          </div>
+        </section>
+        <button id="again-button" class="again-control" type="button">PLAY AGAIN <span aria-hidden="true">↻</span></button>
+        <button id="title-button" class="title-button" type="button">BACK TO START</button>
+      </div>
+    </section>
+
+    <section class="charity-section" aria-labelledby="charity-heading">
+      <svg class="charity-section-icon" viewBox="0 0 48 54" aria-hidden="true"><use href="#jerry-can"/></svg>
+      <div class="charity-section-copy">
+        <p class="charity-kicker">PLAY WITH PURPOSE</p>
+        <h2 id="charity-heading">Clean water. A shared mission.</h2>
+        <p>charity: water helps bring clean and safe drinking water to people who need it. Explore the mission or support clean-water projects on their official website.</p>
+        <div class="mission-links">
+          <a class="mission-link" href="https://www.charitywater.org/" target="_blank" rel="noopener noreferrer">Official charity: water website<span aria-hidden="true">&nbsp;↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
+          <a class="mission-link donation-link" href="https://www.charitywater.org/donate" target="_blank" rel="noopener noreferrer">Donate to charity: water<span aria-hidden="true">&nbsp;↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
+        </div>
+        <p class="charity-disclaimer">An independent educational game inspired by charity: water. This is not an official charity: water product. Tank progress is part of the game.</p>
+      </div>
+    </section>
+    <footer class="mechanic-strip"><span>Blue water <b>+10</b></span><i aria-hidden="true"></i><span>Pollution <b>−15</b> &amp; <b>−1 heart</b></span><i aria-hidden="true"></i><span>Every <b>5</b> drops → <b>1</b> sip + <b>4</b> tank units</span><i aria-hidden="true"></i><span>Tank progress saves automatically</span></footer>
+    <div id="tank-confetti" class="tank-confetti" aria-hidden="true"></div>
+    <p id="announcer" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></p>
+    <noscript><p class="noscript-message">Please enable JavaScript to play Chug Chug Run.</p></noscript>
+  </main>
+
+  <dialog id="how-to-play-dialog" class="how-to-play-dialog" aria-labelledby="how-to-play-heading" aria-describedby="how-to-play-intro">
+    <h2 id="how-to-play-heading" tabindex="-1" autofocus>HOW TO PLAY</h2>
+    <p id="how-to-play-intro">Collect water, keep moving, and help fill the game’s community tank.</p>
+    <dl class="how-to-play-controls">
+      <div><dt>Move</dt><dd>Hold <kbd>A</kbd> / <kbd>D</kbd> or <kbd>←</kbd> / <kbd>→</kbd> (Left / Right Arrow).</dd></div>
+      <div><dt>Jump</dt><dd>Press <kbd>Space</kbd> or <kbd>↑</kbd> (Up Arrow). Press again in the air to double jump.</dd></div>
+      <div><dt>Slide</dt><dd>Hold <kbd>S</kbd> or <kbd>↓</kbd> (Down Arrow) while on the ground.</dd></div>
+    </dl>
+    <p class="how-to-play-mobile">On mobile, use the arrow, Jump, and Slide buttons.</p>
+    <ul class="how-to-play-goals">
+      <li>Collect the <strong>blue water drops</strong>.</li>
+      <li><strong>Keep up!</strong> Once your entire collision body leaves the left edge of the screen, move right to return within four seconds. Reaching 1.5 meters (about five feet) beyond that edge ends the run immediately, even with hearts or damage protection left. Anywhere on-screen is safe.</li>
+      <li>Avoid toxic hazards and dangerous obstacles. Jump over ground hazards and slide under overhead barriers.</li>
+      <li>Every <strong>five water pickups</strong> provides one automatic hydration sip. The remaining water contributes toward the community water tank.</li>
+    </ul>
+    <section class="how-to-play-mission" aria-labelledby="how-to-play-mission-heading">
+      <h3 id="how-to-play-mission-heading">RUN FOR CLEAN WATER</h3>
+      <p>charity: water works to bring clean and safe drinking water to people who need it. Collecting water and filling the community tank brings that mission into the game.</p>
+    </section>
+    <div class="dialog-actions"><span>Press <kbd>Esc</kbd> to close</span><button id="how-to-play-close" class="how-to-play-button" type="button">CLOSE</button></div>
+  </dialog>
+</body>
+</html>
